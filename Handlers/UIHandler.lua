@@ -1,33 +1,45 @@
-local Handler = {}
+local UiHandler = {}
 
-Handler.elements = {}
+UiHandler.elements = {}
 
 
-function Handler.Add(element)
-    table.insert(Handler.elements, element)
+function UiHandler.AddUiElement(element)
+    table.insert(UiHandler.elements, element)
 end
 
 
-function Handler.Draw()
-    for _, v in ipairs(Handler.elements) do
+function UiHandler.Draw()
+    for _, v in ipairs(UiHandler.elements) do
         v:draw()
     end
 end
 
-function Handler.Update(dt)
-    for _, v in ipairs(Handler.elements) do
+function UiHandler.Update(dt)
+    for _, v in ipairs(UiHandler.elements) do
         v:update(dt)
     end
 end
 
-function Handler.MousePressed(x, y, button)
-    for _, v in ipairs(Handler.elements) do
+function UiHandler.MousePressed(x, y, button)
+    for _, v in ipairs(UiHandler.elements) do
         if v.MousePressed then
             v:MousePressed(x, y, button)
         end
     end
 end
 
+function UiHandler.RemoveUiElement(element)
+    for i, v in ipairs(UiHandler.elements) do
+        if v == element then
+            print("Removed", element.name)
+            return
+        end
+    end
+
+    warn("Could Not Properly Destroy UIElement:", element.name)
+end
 
 
-return Handler
+
+
+return UiHandler

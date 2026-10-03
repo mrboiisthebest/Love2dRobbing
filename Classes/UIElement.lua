@@ -4,18 +4,19 @@ local UIElement = {}
 
 UIElement.__index = UIElement
 
-function UIElement.new(x, y, width, height)
+function UIElement.new(name, x, y, width, height)
     local self = setmetatable({}, UIElement)
+    self.name = name
     self.x = x
     self.y = y
     self.width = width
     self.height = height
-    self.visable = true
+    self.visible = true
     self.active = true
     self.layer = 0
     self.isHovered = false
 
-    UIHandler.Add(self)
+    UIHandler.AddUiElement(self)
     return self
 end
 
@@ -25,21 +26,32 @@ function UIElement:containsPoint(px, py)
 end
 
 function UIElement:Update(dt)
-    if not self.active or not self.visable then
+    if not self.active or not self.visible then
         return
     end
 
     local mx, my = love.mouse.getPosition()
-    self.isHovered = self:containsPoint(mx, my)
+    local valid, sx, sy = shove.screenToViewport(mx, my)
+    
+
+    if sx and sy and valid then
+        self.isHovered = self:containsPoint(sx, sy)
+    else
+        self.isHovered = false
+    end
 
 end
 
 function UIElement:draw()
-    if not self.visable then
+    if not self.visible then
         return
     end
 
     love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+end
+
+function UIElement:Destroy()
+    UIHandler.RemoveUiElement(self)
 end
 
 
