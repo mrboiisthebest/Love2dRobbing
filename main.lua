@@ -4,6 +4,7 @@ local UIHandler = require("Handlers.UIHandler")
 local UIButton = require("Classes.UIButton")
 local GameHandler = require("Handlers.GameHandler")
 local GameData = require("Handlers.GameData")
+local SaveHandler = require("Handlers.SaveHandler")
 
 -- Libraries
 shove = require("libraries.shove")
@@ -23,10 +24,17 @@ function love.load()
     shove.setWindowMode(1280, 720, {resizable = true})
 
     local function onClick()
-        print("CLICKED!!")
+        GameData.Data.playerData.Money = GameData.Data.playerData.Money + 1
+        SaveHandler.Save()
+        
     end
 
     local myButon = UIButton.new("TestButton", 300, 300, 100, 100, onClick)
+    SaveHandler.Load()
+end
+
+function love.quit()
+    SaveHandler.Save()
 end
 
 function love.update(dt)

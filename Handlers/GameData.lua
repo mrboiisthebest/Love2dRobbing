@@ -1,12 +1,13 @@
-local GameData = {
-    playerData = {
-        Money = 0,
-        SecondsPlayed = 0
+local GameData = {}
+
+GameData.Data = {
+    ["playerData"] = {
+        ["Money"] = 0,
+        ["SecondsPlayed"] = 0
     },
-    generalData = {
+    ["generalData"] = {
         -- Game Bool Values
     }
-    
 }
 
 return GameData
