@@ -1,10 +1,10 @@
 -- Dependencies
 
-local UIHandler = require("Handlers.UIHandler")
 local UIButton = require("Classes.UIButton")
 local GameHandler = require("Handlers.GameHandler")
 local GameData = require("Handlers.GameData")
 local SaveHandler = require("Handlers.SaveHandler")
+local EventHandler = require("Handlers.EventHandler")
 
 -- Libraries
 shove = require("libraries.shove")
@@ -19,6 +19,10 @@ function love.load()
     local major, minor, revision, codename = love.getVersion()
     print(string.format("Version: %d.%d.%d - %s", major, minor, revision, codename))
 
+    SaveHandler.Load()
+    EventHandler.Init()
+
+
     -- Shove Library Configs (For Drawing)
     shove.setResolution(1280, 720, {fitMethod = "aspect"})
     shove.setWindowMode(1280, 720, {resizable = true})
@@ -30,7 +34,7 @@ function love.load()
     end
 
     local myButon = UIButton.new("TestButton", 300, 300, 100, 100, onClick)
-    SaveHandler.Load()
+
 end
 
 function love.quit()
@@ -54,9 +58,9 @@ function love.resize(w, h)
 end
 
 function love.mousepressed(x, y, button, isTouch, presses)
-    local valid, sx, sy = shove.screenToViewport(x, y)
-    if valid then
-        UIHandler.MousePressed(sx, sy, button)
-    end
-    
+     EventHandler.FireEvent("MouseInputEvent", {x, y, button})
+end
+
+function love.keypressed(key)
+    EventHandler.FireEvent("KeyboardInputEvent", {key})
 end
