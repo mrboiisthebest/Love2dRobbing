@@ -25,7 +25,7 @@ function UIElement:containsPoint(px, py)
            py >= self.y and py <= self.y + self.height
 end
 
-function UIElement:Update(dt)
+function UIElement:update(dt)
     if not self.active or not self.visible then
         return
     end

@@ -32,11 +32,12 @@ function UiHandler.RemoveUiElement(element)
     for i, v in ipairs(UiHandler.elements) do
         if v == element then
             print("Removed", element.name)
+            table.remove(UiHandler.elements, i)
             return
         end
     end
 
-    warn("Could Not Properly Destroy UIElement:", element.name)
+    print("Could Not Properly Destroy UIElement:", element.name)
 end
 
 

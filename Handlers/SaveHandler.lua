@@ -7,9 +7,7 @@ local SaveHandler = {}
 
 SaveHandler.fileName = "rapio_save.json"
 
-SaveHandler.DefaultData = {
-    GameData.Data
-}
+
 
 local function copyTable(target)
     local targetType = type(target)
@@ -17,7 +15,7 @@ local function copyTable(target)
     if targetType == "table" then
         copy = {}
         
-        for i, v in pairs(table) do
+        for i, v in pairs(target) do
             copy[i] = copyTable(v)
         end
 
@@ -27,12 +25,14 @@ local function copyTable(target)
     return copy
 end
 
+SaveHandler.DefaultData =  copyTable(GameData.Data)
+
 function SaveHandler.Save()
     local data = GameData.Data
     local sucsess, encodedString = pcall(json.encode, data)
     
     if not sucsess then
-        warn("DATA COULD NOT BE ENCODED DID NOT SAVE!")
+        print("DATA COULD NOT BE ENCODED DID NOT SAVE!")
         return
     end
 

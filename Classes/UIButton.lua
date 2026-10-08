@@ -19,7 +19,7 @@ end
 
 
 function UIButton:update(dt)
-    UIElement.Update(self, dt)
+    UIElement.update(self, dt)
 
     if not self.active or not self.visible then
         return

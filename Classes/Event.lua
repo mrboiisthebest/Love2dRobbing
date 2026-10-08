@@ -23,7 +23,8 @@ end
 function Event:RemoveListener(callback)
     for i, v in ipairs(self.Listeners) do 
         if v == callback then
-            self.Listeners[i] = nil
+            table.remove(self.Listeners, i)
+            return
         end
     end
 end
