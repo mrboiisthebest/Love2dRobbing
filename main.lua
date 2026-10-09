@@ -5,6 +5,7 @@ local GameHandler = require("Handlers.GameHandler")
 local GameData = require("Handlers.GameData")
 local SaveHandler = require("Handlers.SaveHandler")
 local EventHandler = require("Handlers.EventHandler")
+local ItemClass = require("Classes.Item")
 
 -- Libraries
 shove = require("libraries.shove")
@@ -34,6 +35,11 @@ function love.load()
     end
 
     local myButon = UIButton.new("TestButton", 300, 300, 100, 100, onClick)
+
+
+    local testItem = ItemClass.new("TestItem", 5, "Upgrade", {Stats = {["Health"] = {type = 1, value = 20}}})
+    testItem:Destroy()
+
 
 end
 
