@@ -36,11 +36,6 @@ function love.load()
 
     local myButon = UIButton.new("TestButton", 300, 300, 100, 100, onClick)
 
-
-    local testItem = ItemClass.new("TestItem", 5, "Upgrade", {Stats = {["Health"] = {type = 1, value = 20}}})
-    testItem:Destroy()
-
-
 end
 
 function love.quit()
