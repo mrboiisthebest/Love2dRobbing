@@ -12,7 +12,8 @@ GameData.Data = {
     },
     ["generalData"] = {
         -- Game Bool Values
-    }
+    },
+    ["NextID"] = 0,
 }
 
 

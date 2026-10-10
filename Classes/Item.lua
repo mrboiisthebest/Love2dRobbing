@@ -4,7 +4,7 @@ local GameData = require("Handlers.GameData")
 local Item = {}
 
 Item.__index = Item
-
+Item.Items = {}
 
 local function isValidStat(statName)
 
@@ -42,7 +42,9 @@ Item.Types = {
             local oppType = incrementData.type or 1
             local incrementValue = incrementData.value
 
-            GameData.AddStatMod(statName, item.Name, {type = oppType, value = incrementValue})
+            local modName = item.Name .. "-" .. item.ID
+
+            GameData.AddStatMod(statName, modName, {type = oppType, value = incrementValue})
             ::continue::
         end
 
@@ -55,7 +57,6 @@ Item.Types = {
     end,
 }
 
-Item.Items = {}
 
 
 local function isValidType(targetType)
@@ -81,6 +82,10 @@ function Item.new(name, value, itemType, typeData, callback)
     self.Value = value
     self.TypeData = typeData -- is a table that has stat changes (used for the default behaviours) {}
     self.Type = "Template" -- in case an invalid type is given
+    self.Used = false
+
+    GameData.Data.NextID = GameData.Data.NextID + 1
+    self.ID = GameData.Data.NextID
 
     if isValidType(itemType) then
         self.Type = itemType
@@ -97,15 +102,14 @@ function Item.new(name, value, itemType, typeData, callback)
             self.callback = foundCallback
         end
 
-        else
-            self.callback = callback
+    else
+        self.callback = callback
     end
     
     table.insert(Item.Items, self)
 
     return self
 end
-
 
 function Item:Destroy()
     for i, v in ipairs(Item.Items) do
@@ -117,16 +121,20 @@ function Item:Destroy()
             if not typeData or not typeData.Stats then
                 goto jumptoend
             end
+            
+            if self.Used then
+                for statName, _ in pairs(typeData.Stats) do
+                    if not isValidStat(statName) then
+                        print("Inavlid Stat! Cant Remove Modifiers!")
+                        goto continue
+                    end
 
-            for statName, _ in pairs(typeData.Stats) do
-                if not isValidStat(statName) then
-                    print("Inavlid Stat! Cant Remove Modifiers!")
-                    goto continue
+                    local modName = self.Name .. "-" .. self.ID
+
+                    GameData.RemoveStatMod(statName, modName)
+
+                    ::continue::
                 end
-
-                GameData.RemoveStatMod(statName, self.Name)
-
-                ::continue::
             end
 
             ::jumptoend::
@@ -138,8 +146,18 @@ function Item:Destroy()
 end
 
 function Item:Use()
-    self.callback(self)
+    if not self.Used then
+        self.Used = true
+        self.callback(self)
+    end
+    
 end
+
+function Item:Clone()
+    local ClonedItem = Item.new(self.Name, self.Value, self.Type, self.TypeData, self.callback)
+    return ClonedItem
+end
+
 
 
 return Item
