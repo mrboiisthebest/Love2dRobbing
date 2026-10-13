@@ -6,6 +6,7 @@ local GameData = require("Handlers.GameData")
 local SaveHandler = require("Handlers.SaveHandler")
 local EventHandler = require("Handlers.EventHandler")
 local ItemClass = require("Classes.Item")
+local ShopClass = require("Classes.Shop")
 
 -- Libraries
 shove = require("libraries.shove")
@@ -29,7 +30,7 @@ function love.load()
     shove.setWindowMode(1280, 720, {resizable = true})
 
     local function onClick()
-        GameData.Data.playerData.Money = GameData.Data.playerData.Money + 1
+        print("Button Pressed")
         SaveHandler.Save()
         
     end

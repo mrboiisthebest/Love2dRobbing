@@ -12,9 +12,9 @@ local function ShopExists(shopName)
     end
 end
 
-local function ContainsItem(item, shopObject)
+local function ContainsItem(itemID, shopObject)
     for _, v in ipairs(shopObject.Items) do
-        if v == item then
+        if v.ID == itemID then
             return true
         end
     end
@@ -52,23 +52,25 @@ function Shop:AddItem(item)
 
     if ContainsItem(item, self) then
         print("Cant Add Item! Already In Shop:", item.Name)
-        return
+        return 
     end
 
     local Cloneditem = item:Clone()
-
     table.insert(self.Items, Cloneditem)
+    print("added item to shop:", self.Name)
+    return Cloneditem -- optional way to get new item
 end
 
-function Shop:RemoveItem(item)
-    if item == nil then
-        print("No Item Provided!")
+function Shop:RemoveItem(itemID)
+    if itemID == nil or type(itemID) ~= "number" then
+        print("No Item ID Provided!")
         return
     end
 
+
     for i, v in ipairs(self.Items) do
-        if v == item then
-            print("Removed Item!")
+        if v.ID == itemID then
+            print("Removed item from shop:", self.Name)
             table.remove(self.Items, i) 
             return
         end

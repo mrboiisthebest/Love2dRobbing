@@ -139,6 +139,9 @@ function Item:Destroy()
 
             ::jumptoend::
 
+            GameData.RemoveItem(self) -- sends remove but only does stuff if item is owned
+
+
             print("Destroyed Item:", self.Name)
             return
         end
@@ -147,15 +150,27 @@ end
 
 function Item:Use()
     if not self.Used then
-        self.Used = true
+        GameData.UseItem(self)
         self.callback(self)
+        self.Used = true
     end
     
 end
 
 function Item:Clone()
     local ClonedItem = Item.new(self.Name, self.Value, self.Type, self.TypeData, self.callback)
+    print("Created Clone Item of", self.Name, " ID:", ClonedItem.ID)
     return ClonedItem
+end
+
+
+
+function Item:GiveToPlayer()
+    GameData.AddItem(self)
+end
+
+function Item:RemoveFromPlayer()
+    GameData.RemoveItem(self)
 end
 
 

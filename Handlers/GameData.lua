@@ -9,6 +9,7 @@ GameData.Data = {
         },
         ["Money"] = 0,
         ["SecondsPlayed"] = 0,
+        ["Items"] = {} 
     },
     ["generalData"] = {
         -- Game Bool Values
@@ -16,10 +17,7 @@ GameData.Data = {
     ["NextID"] = 0,
 }
 
-
 --["Health"] = {baseValue = 100, modifiers = {["ModName"] = {type = 1, value = 2}}, ...},
-
-
 local function ApplyModifier(baseNumber, modData)
     
     local Opp = modData.type
@@ -90,7 +88,6 @@ function GameData.GetStat(StatName)
 
 end
 
-
 function GameData.AddStatMod(Statname,ModName, ModData)
     local Stat = GameData.Data["playerData"]["Stats"][Statname]
 
@@ -124,6 +121,47 @@ function GameData.RemoveStatMod(Statname, ModName)
         Stat.modifiers[ModName] = nil
     end
 
+end
+
+
+function GameData.AddItem(Item)
+    if not Item or not Item.Name or not Item.ID then
+        print("Invalid Item!")
+        return
+    end
+
+    local FoundItem = GameData.Data["playerData"]["Items"][Item.Name .. "-" .. Item.ID]
+    if FoundItem then
+        print("Item Already In Players inv!")
+        return
+    end
+
+    GameData.Data["playerData"]["Items"][Item.Name .. "-" .. Item.ID] = {Name = Item.Name, ID = Item.ID, Used = Item.Used}
+end
+
+function GameData.RemoveItem(Item)
+    if not Item or not Item.Name or not Item.ID then
+        print("Invalid Item!")
+        return
+    end
+
+    local FoundItem = GameData.Data["playerData"]["Items"][Item.Name .. "-" .. Item.ID]
+    if FoundItem then
+        GameData.Data["playerData"]["Items"][Item.Name .. "-" .. Item.ID] = nil
+    end
+end
+
+-- Used Just To Update The Values. Is Called ByThe Main Use Function
+function GameData.UseItem(Item)
+    if not Item or not Item.Name or not Item.ID then
+        print("Invalid Item!")
+        return
+    end
+
+    local FoundItem = GameData.Data["playerData"]["Items"][Item.Name .. "-" .. Item.ID]
+    if FoundItem and not FoundItem.Used then
+       FoundItem.Used = true
+    end
 end
 
 
